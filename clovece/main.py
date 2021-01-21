@@ -2,7 +2,6 @@ from player import Player
 from game import Game
 import colorama
 from colorama import Fore
-from art import dice_one
 
 colorama.init(autoreset=True)
 
@@ -14,24 +13,24 @@ game = Game(players, 10)
 
 
 while True:
-    #game.PrintStats()
-    currentPlayer = players[game.turn]
+    currentPlayer = players[game.turn] # get player that is currently at turn
     print("\n" + Fore.GREEN + f"It's {currentPlayer.name}'s turn!")
-    #game.PrintStats(currentPlayer)
     game.PrintPos(currentPlayer)
+    print(currentPlayer.FiguresOnBoard())
 
     input("Dice roll...")
     roll = game.RollDice()
-    game.DrawDice(roll)
+    game.DrawDice(roll) # draw art of the dice
 
     
 
-    if roll == 6 and currentPlayer.HasFigure():
+    if roll == 6 and currentPlayer.HasFigure(): # todo check if player figures at START is higher than 0
         choice = input("Do you want to place new figure or make a move? (f/m)")
         if choice == "f":
             currentPlayer.PlaceFigure(game.homes[game.turn])
         else:
-            game.Move(currentPlayer, currentPlayer.FiguresInGame()[0], roll)
+            # ask which figure to move
+            game.Move(currentPlayer, currentPlayer.FiguresOnBoard()[0], roll)
     
     elif roll == 6:
         currentPlayer.PlaceFigure(game.homes[game.turn])
@@ -39,16 +38,20 @@ while True:
     elif currentPlayer.HasFigure() == False:
         print("Sorry, you must roll six to place a figure!")
     
-    elif currentPlayer.CountFiguresInGame() == 1:
-        game.Move(currentPlayer, currentPlayer.FiguresInGame()[0], roll)
+    elif currentPlayer.CountFiguresOnBoard() == 1:
+        game.Move(currentPlayer, currentPlayer.FiguresOnBoard()[0], roll)
     
     else:
-        print("Select a figure you want to move!")
-        index = 0
-        for figure in currentPlayer.FiguresInGame():
-            print(figure)
+        game.SelectFigureDialog(currentPlayer)
         choice = int(input(":"))
-        game.Move(currentPlayer, currentPlayer.FiguresInGame()[choice], roll)
+        game.Move(currentPlayer, choice, roll)
+
+        # print("Select a figure you want to move!")
+        # index = 0
+        # for figure in currentPlayer.FiguresOnBoard():
+        #     print(figure)
+        # choice = int(input(":"))
+        # game.Move(currentPlayer, choice, roll)
         
     
 

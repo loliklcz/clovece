@@ -41,22 +41,30 @@ class Game:
         print(" ".join(onBoard) + "\n" + " ".join(atStart) + " | " + " ".join(atHome))
 
     
-    def RollDice(self):
+    def RollDice(self) -> int:
         roll = random.randint(1, self.diceMax)
         print(f"You rolled {roll}")
         return roll
 
-    def DrawDice(self, roll):
+    def DrawDice(self, roll: int):
         print(dice[roll - 1])
 
-    def Move(self, player, figure, number):
+    def SelectFigureDialog(self, player):
+        print("Select a figure you want to move!")
+        index = 0
+        for figure in player.FiguresOnBoard():
+            print(figure)
+
+    def Move(self, player, figure:int, number:int):
         player.pos[figure][0] += number
 
         # Game logic
         for plr in self.players:
-            for pos in plr.pos:
+            for index, pos in enumerate(plr.pos):
                 if pos[0] == player.pos[figure][0] and plr != player:
-                    pass
+                    plr.pos[index] = [-1, False]
+                    print(Fore.RED + f"{player.name} destroyed {plr.name}!")
+                    print(plr.pos)
 
         if player.pos[figure][0] > self.size:
             player.pos[figure][0] -= self.size

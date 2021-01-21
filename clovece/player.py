@@ -13,9 +13,9 @@ class Player:
                 return True
         return False
 
-    def CountFiguresInGame(self): # NOT SURE IF THIS WORKS
+    def CountFiguresOnBoard(self):
         """
-        Return number of figures in game
+        Return number of figures on the board
         """
         figures = 0
         for figure in self.pos:
@@ -23,7 +23,19 @@ class Player:
                 figures += 1
         return figures
 
-    def GetFigureInHome(self):
+    def FiguresOnBoard(self):
+        """
+        Return indexes of figures on the board
+        """
+        figures = []
+        index = 0
+        for figure in self.pos:
+            if figure[0] > -1:
+                figures.append(index)
+            index += 1
+        return figures
+
+    def GetFigureAtHome(self):
         """
         Return first figure at home
         """
@@ -33,20 +45,8 @@ class Player:
                 return index
             index += 1
 
-    def FiguresInGame(self):
-        """
-        Return indexes of figures on the board
-        """
-        figures = []
-        index = 0
-        for figure in self.pos:
-            if figure[0] > -1:
-                figures.append(index)
-                index += 1
-        return figures
-
     def PlaceFigure(self, home):
         """
         Place figure on the board
         """
-        self.pos[self.GetFigureInHome()][0] = home + 1
+        self.pos[self.GetFigureAtHome()][0] = home + 1
