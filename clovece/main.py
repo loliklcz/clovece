@@ -6,59 +6,47 @@ from colorama import Fore
 colorama.init(autoreset=True)
 
 player1 = Player("Test", "red")
-player2 = Player("Test2", "blue")
+player2 = Player("Abc", "blue")
 
 players = [player1, player2]
-game = Game(players, 10)
+# game = Game(players, 10)
+
+for _i in range(1, 20):
+    game = Game(players, 10)
 
 
 while True:
-    currentPlayer = players[game.turn] # get player that is currently at turn
-    print("\n" + Fore.GREEN + f"It's {currentPlayer.name}'s turn!")
-    game.PrintPos(currentPlayer)
-    print(currentPlayer.FiguresOnBoard())
+    pass
 
-    input("Dice roll...")
-    roll = game.RollDice()
-    game.DrawDice(roll) # draw art of the dice
-
-    
-
-    if roll == 6 and currentPlayer.HasFigure(): # todo check if player figures at START is higher than 0
-        choice = input("Do you want to place new figure or make a move? (f/m)")
-        if choice == "f":
-            currentPlayer.PlaceFigure(game.homes[game.turn])
-        else:
-            # ask which figure to move
-            game.Move(currentPlayer, currentPlayer.FiguresOnBoard()[0], roll)
-    
-    elif roll == 6:
-        currentPlayer.PlaceFigure(game.homes[game.turn])
-    
-    elif currentPlayer.HasFigure() == False:
-        print("Sorry, you must roll six to place a figure!")
-    
-    elif currentPlayer.CountFiguresOnBoard() == 1:
-        game.Move(currentPlayer, currentPlayer.FiguresOnBoard()[0], roll)
-    
-    else:
-        game.SelectFigureDialog(currentPlayer)
-        choice = int(input(":"))
-        game.Move(currentPlayer, choice, roll)
-
-        # print("Select a figure you want to move!")
-        # index = 0
-        # for figure in currentPlayer.FiguresOnBoard():
-        #     print(figure)
-        # choice = int(input(":"))
-        # game.Move(currentPlayer, choice, roll)
-        
-    
-
-
-
-
-
-    game.turn += 1
-    if game.turn >= len(players):
-        game.turn = 0
+    # input("Dice roll...")
+    # roll = game.roll_dice()
+    # game.draw_dice(roll)  # draw art of the dice
+    #
+    # if roll == 6 and currentPlayer.has_figure() and currentPlayer.get_figure_at_start() is not None:
+    #     choice = input("Do you want to place new figure or make a move? (f/m)")
+    #     if choice == "f":
+    #         currentPlayer.place_figure(game.homes[game.turn])
+    #     else:
+    #         # ask which figure to move
+    #         game.select_figure_dialog(currentPlayer)
+    #         choice = int(input(":"))
+    #         game.move(currentPlayer, choice, roll)
+    #         # game.move(currentPlayer, currentPlayer.figures_on_board()[0], roll)
+    #
+    # elif roll == 6 and currentPlayer.get_figure_at_start() is not None:
+    #     currentPlayer.place_figure(game.homes[game.turn])
+    #
+    # elif not currentPlayer.has_figure():
+    #     print("Sorry, you must roll six to place a figure!")
+    #
+    # elif currentPlayer.count_figures_on_board() == 1:
+    #     game.move(currentPlayer, currentPlayer.figures_on_board()[0], roll)
+    #
+    # else:
+    #     game.select_figure_dialog(currentPlayer)
+    #     choice = int(input(":"))
+    #     game.move(currentPlayer, choice, roll)
+    #
+    # game.turn += 1
+    # if game.turn >= len(players):  # check if turn is larger or same as player count
+    #     game.turn = 0  # set turn back to 0

@@ -1,10 +1,10 @@
 class Player:
-    def __init__(self, name, color):
+    def __init__(self, name: str, color: str):
         self.name = name
         self.color = color
-        self.pos = [[-1, False], [-1, False], [-1, False], [-1, False]] # pos, completedBoard
+        self.pos = [[-1, False], [-1, False], [-1, False], [-1, False]]  # pos, completedBoard
 
-    def HasFigure(self):
+    def has_figure(self):
         """
         Check if player has at least one figure on the board
         """
@@ -13,7 +13,7 @@ class Player:
                 return True
         return False
 
-    def CountFiguresOnBoard(self):
+    def count_figures_on_board(self) -> int:
         """
         Return number of figures on the board
         """
@@ -23,7 +23,7 @@ class Player:
                 figures += 1
         return figures
 
-    def FiguresOnBoard(self):
+    def figures_on_board(self) -> list:
         """
         Return indexes of figures on the board
         """
@@ -35,9 +35,9 @@ class Player:
             index += 1
         return figures
 
-    def GetFigureAtHome(self):
+    def get_figure_at_start(self) -> int:
         """
-        Return first figure at home
+        Return index of first figure at start
         """
         index = 0
         for figure in self.pos:
@@ -45,8 +45,8 @@ class Player:
                 return index
             index += 1
 
-    def PlaceFigure(self, home):
+    def place_figure(self, game):
         """
         Place figure on the board
         """
-        self.pos[self.GetFigureAtHome()][0] = home + 1
+        self.pos[self.get_figure_at_start()][0] = game.homes[game.turn] + 1
