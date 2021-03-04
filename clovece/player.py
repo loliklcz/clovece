@@ -1,7 +1,10 @@
+from strategy import *
+
+
 class Player:
-    def __init__(self, name: str, color: str):
+    def __init__(self, name: str, strategy: Strategy):
         self.name = name
-        self.color = color
+        self.strategy = strategy
         self.pos = [[-1, False], [-1, False], [-1, False], [-1, False]]  # pos, completedBoard
 
     def has_figure(self):

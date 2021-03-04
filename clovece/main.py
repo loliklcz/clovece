@@ -1,18 +1,18 @@
 from player import Player
 from game import Game
+from strategy import *
 import colorama
-from colorama import Fore
 
 colorama.init(autoreset=True)
 
-player1 = Player("Test", "red")
-player2 = Player("Abc", "blue")
+player1 = Player("Test", MoveCloserToHome())
+player2 = Player("Abc", Random())
 
 players = [player1, player2]
-# game = Game(players, 10)
+game = Game(players, 10)
 
-for _i in range(1, 20):
-    game = Game(players, 10)
+# for _i in range(1, 20):
+#    game = Game(players, 10)
 
 
 while True:

@@ -1,8 +1,8 @@
-import random
+# import random
 from art import dice
 from colorama import init, Fore
 from player import Player
-from strategy import Random
+from strategy import *
 import time
 
 init(autoreset=True)
@@ -34,6 +34,7 @@ class Game:
 
     def do_turn(self):
         current_player = self.players[self.turn]  # get player that is currently at turn
+
         print("\n" + Fore.GREEN + f"It's {current_player.name}'s turn!")  # 'It's Test's turn!'
         self.print_pos(current_player)  # '❌ ❌ ❌ | 🏠'
 
@@ -43,14 +44,15 @@ class Game:
         self.check_roll(roll)  # do action based on roll number
 
         self.turn += 1
-        if self.turn >= len(self.players):  # check if turn is larger or same as player count
-            self.turn = 0  # set turn back to 0
+        if self.turn >= len(self.players):  # check if 'turn' is larger or same as player count
+            self.turn = 0  # set 'turn' back to 0
 
         return True
 
     def check_roll(self, roll: int):
         player: Player = self.players[self.turn]
-        strategy = Random(self, player, roll)
+        # strategy = player.strategy(self, player, roll)
+        strategy = player.strategy
         """
         check = at least one figure at start
 
@@ -63,16 +65,15 @@ class Game:
 
         if roll == 6 and player.has_figure() and player.get_figure_at_start() is not None:
             print("You rolled 6!")
-            strategy.move_place_choice()
+            strategy.move_place_choice(self, player, roll)
         elif roll == 6 and player.get_figure_at_start() is not None:
             print("Placing figure!")
             player.place_figure(self)
         elif player.count_figures_on_board() > 1:
-            strategy.move_choice()
+            strategy.move_choice(self, player, roll)
         elif player.has_figure():
             self.move(player, player.figures_on_board()[0], roll)
         else:
-            pass
             print("Sorry, you must roll six to place a figure!")
 
         """
@@ -131,16 +132,22 @@ class Game:
 
     @staticmethod
     def draw_dice(roll: int):
+        """
+        Draw dice image
+        """
         print(dice[roll - 1])
 
     @staticmethod
     def select_figure_dialog(player):
+        """
+        TODO: remove this function later, it only displays available figures to user (not needed while using strategies)
+        """
         print("Select a figure you want to move!")
         # index = 0 remove later
         for figure in player.figures_on_board():
             print(figure)
 
-    def move(self, player, figure: int, number: int):
+    def move(self, player, figure: int, number: int):  # TODO: simplify this function
         player.pos[figure][0] += number
 
         # Game logic
