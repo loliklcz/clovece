@@ -17,14 +17,14 @@ class Game:
         self.homes = [0, size // 2]
 
         # !!! REMOVE AFTER TESTING !!!
-        p: Player = players[0]
-        p.pos[0][0] = 0
-        # p.pos[1][0] = 5
-        # p.pos[2][0] = 8
-        p2: Player = players[1]
-        p2.pos[0][0] = 1
+        # p: Player = players[0]
+        # p.pos[0][0] = self.homes[0]
+
+        # p2: Player = players[1]
+        # p2.pos[0][0] = self.homes[1]
 
         self.start_time = time.time()
+        print(self.homes)
 
         while self.do_turn():
             pass
