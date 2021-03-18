@@ -48,10 +48,6 @@ class Random(Strategy):
             player.place_figure(game)
         else:
             figure = random.choice(player.figures_on_board())
-            # figures = self.player.figures_on_board()
-            # print(figures)
-            print("Selected figure: " + str(figure) + "*"*30)  # TODO: REMOVE
-
             game.move(player, figure, roll)
 
     def move_choice(self, game, player, roll):
@@ -61,17 +57,17 @@ class Random(Strategy):
 
 class MoveCloserToHome(Strategy):
 
-    def move_place_choice(self, game, player, roll):  # TODO
-        place_or_move = random.randint(0, 1)
-        if place_or_move == 0:
-            player.place_figure(game)
-        else:
-            figure = random.choice(player.figures_on_board())
-            # figures = self.player.figures_on_board()
-            # print(figures)
-            print("Selected figure: " + str(figure) + "*"*30)  # TODO: REMOVE
+    def move_place_choice(self, game, player, roll):
+        closest = closest_pos(player.pos)
 
+        if game.turn == 0 and closest[0] >= 7:
+            figure = player.pos.index(closest)
             game.move(player, figure, roll)
+        elif game.turn == 1 and closest[0] >= 2:
+            figure = player.pos.index(closest)
+            game.move(player, figure, roll)
+        else:
+            player.place_figure(game)
 
     def move_choice(self, game, player, roll):
 
@@ -99,14 +95,12 @@ class MoveCloserToHome(Strategy):
             closest = [None, random.choice(player.figures_on_board())]
         """
 
-        print("Closest pos found!")
-        print(player.pos)
-        print(closest_pos(player.pos))
-
+        """
         for figure in player.figures_on_board():
             if figure == closest_pos(player.pos)[0]:
                 game.move(player, figure, roll)
                 break
+        """
 
         figure = player.pos.index(closest_pos(player.pos))
         game.move(player, figure, roll)

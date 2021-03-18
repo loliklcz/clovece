@@ -3,44 +3,46 @@ from art import dice
 from colorama import init, Fore
 from player import Player
 from strategy import *
-import time
+from time import time
 
 init(autoreset=True)
 
 
 class Game:
-    def __init__(self, players, size):
+    def __init__(self, players, size, debug=False):
         self.players = players
         self.size = size
+        self.debug = debug
         self.turn = 0
         self.diceMax = 6
         self.homes = [0, size // 2]
+        self.game_end = False
+        self.player_won = None
 
-        # !!! REMOVE AFTER TESTING !!!
-        # p: Player = players[0]
-        # p.pos[0][0] = self.homes[0]
+        self.start_time = time()
 
-        # p2: Player = players[1]
-        # p2.pos[0][0] = self.homes[1]
+        while self.game_end is not True:
+            self.do_turn()
 
-        self.start_time = time.time()
-        print(self.homes)
-
-        while self.do_turn():
-            pass
-            # print("Doing turn")
-
-        print("Done")
+        if self.debug:
+            print(Fore.CYAN + f"{self.player_won} won!")
+            print("--- %s seconds ---" % (time() - self.start_time))
 
     def do_turn(self):
         current_player = self.players[self.turn]  # get player that is currently at turn
 
-        print("\n" + Fore.GREEN + f"It's {current_player.name}'s turn!")  # 'It's Test's turn!'
-        self.print_pos(current_player)  # '❌ ❌ ❌ | 🏠'
+        if self.debug:
+            print("\n" + Fore.GREEN + f"It's {current_player.name}'s turn!")  # 'It's Test's turn!'
+            self.print_pos(current_player)  # '❌ ❌ ❌ | 🏠'
 
         # Do dice roll
         roll = self.roll_dice()  # get random number as a dice roll
-        self.draw_dice(roll)  # draw a dice image
+
+        if self.debug:
+            print(f"You rolled {roll}")
+        # self.draw_dice(roll)  # draw a dice image # TODO: maybe display it only when debug is true
+        #  (or delete it completely)
+
         self.check_roll(roll)  # do action based on roll number
 
         self.turn += 1
@@ -64,17 +66,22 @@ class Game:
         """
 
         if roll == 6 and player.has_figure() and player.get_figure_at_start() is not None:
-            print("You rolled 6!")
+            if self.debug:
+                print("Calling move_place_choice")
             strategy.move_place_choice(self, player, roll)
         elif roll == 6 and player.get_figure_at_start() is not None:
-            print("Placing figure!")
+            if self.debug:
+                print("Placing figure!")
             player.place_figure(self)
         elif player.count_figures_on_board() > 1:
+            if self.debug:
+                print("Calling move_choice")
             strategy.move_choice(self, player, roll)
         elif player.has_figure():
             self.move(player, player.figures_on_board()[0], roll)
         else:
-            print("Sorry, you must roll six to place a figure!")
+            if self.debug:
+                print("Sorry, you must roll six to place a figure!")
 
         """
         if roll == 6 and player.has_figure() and player.get_figure_at_start() is not None:
@@ -127,7 +134,6 @@ class Game:
 
     def roll_dice(self) -> int:
         roll = random.randint(1, self.diceMax)
-        print(f"You rolled {roll}")
         return roll
 
     @staticmethod
@@ -155,27 +161,29 @@ class Game:
             for index, pos in enumerate(plr.pos):
                 if pos[0] == player.pos[figure][0] and plr != player:
                     plr.pos[index] = [-1, False]
-                    print(Fore.RED + f"{player.name} destroyed {plr.name}!")
-                    print(plr.pos)
+                    if self.debug:
+                        print(Fore.RED + f"{player.name} destroyed {plr.name}!")
+                    # print(plr.pos)
 
         if player.pos[figure][0] > self.size:
             player.pos[figure][0] -= self.size
             player.pos[figure][1] = True
             if player.pos[figure][0] >= self.homes[self.turn]:
-                print("YOU ARE AT HOME!")
+                if self.debug:
+                    print("YOU ARE AT HOME!")
                 player.pos[figure][0] = -2
                 if player.get_figure_at_start() is None and len(player.figures_on_board()) == 0:
                     self.win(player)
                 return
 
         if player.pos[figure][0] >= self.homes[self.turn] and player.pos[figure][1]:
-            print("YOU ARE AT HOME!")
+            if self.debug:
+                print("YOU ARE AT HOME!")
             player.pos[figure][0] = -2
             if player.get_figure_at_start() is None and len(player.figures_on_board()) == 0:
                 self.win(player)
             return
 
     def win(self, player):
-        print(Fore.CYAN + f"{player.name} won!")
-        print("--- %s seconds ---" % (time.time() - self.start_time))
-        exit()
+        self.game_end = True
+        self.player_won = player.name
