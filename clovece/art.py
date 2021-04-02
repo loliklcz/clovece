@@ -1,34 +1,38 @@
-dice_one = """
+"""
+Visual representation of dice roll
+"""
+
+DICE_ONE = """
     ┌─────┐
     │     │
     │  O  │
     └─────┘
 """
-dice_two = """
+DICE_TWO = """
     ┌─────┐
     │ O   │
     │   O │
     └─────┘
 """
-dice_three = """
+DICE_THREE = """
     ┌─────┐
     │  O  │
     │ O O │
     └─────┘
 """
-dice_four = """
+DICE_FOUR = """
     ┌─────┐
     │ O O │
     │ O O │
     └─────┘
 """
-dice_five = """
+DICE_FIVE = """
     ┌───────┐
     │ O   O │
     │ O O O │
     └───────┘
 """
-dice_six = """
+DICE_SIX = """
     ┌───────┐
     │ O O O │
     │ O O O │
@@ -37,4 +41,4 @@ dice_six = """
 
 # ┌┐└┘│─
 
-dice = [dice_one, dice_two, dice_three, dice_four, dice_five, dice_six]
+dice = [DICE_ONE, DICE_TWO, DICE_THREE, DICE_FOUR, DICE_FIVE, DICE_SIX]

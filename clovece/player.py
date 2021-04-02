@@ -1,7 +1,14 @@
-from strategy import *
+"""
+Player class, handles name, strategy and position of player's figures
+"""
+
+from strategy import Strategy
 
 
 class Player:
+    """
+    Player class
+    """
     def __init__(self, name: str, strategy: Strategy):
         self.name = name
         self.strategy = strategy

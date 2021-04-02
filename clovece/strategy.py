@@ -1,12 +1,20 @@
+"""
+Strategy class with all implemented strategies
+"""
+
 import random
-# cannot import name 'Game' from partially initialized module 'game' (most likely due to a circular import)
 
 
 def closest_pos(pos):
-    completed_board_list = []
+    """
+    Return figure that is closest to home
+    """
+
+    completed_board_list = []  # figures that completed board, but aren't finished yet
     closest_list = []
     closest = None
 
+    # pylint:disable=invalid-name
     for p in pos:
         if p[1] is True and p[0] != -2:
             completed_board_list.append(p)
@@ -30,16 +38,21 @@ class Strategy:
     """
 
     def move_place_choice(self, game, player, roll):
-        pass
+        """
+        If you roll 6, have at least one figure and at least one figure available at start.
+            You will decide to move or place.
+        """
 
     def move_choice(self, game, player, roll):
-        pass
+        """
+        If you have more than one figure on board.
+            You will decide which figure to move.
+        """
 
 
 class Random(Strategy):
     """
-    def __init__(self, game, player, roll):
-        super().__init__(game, player, roll)
+    Strategy: Randomly choose to place a figure or move and randomly choose figure to move.
     """
 
     def move_place_choice(self, game, player, roll):
@@ -56,6 +69,10 @@ class Random(Strategy):
 
 
 class MoveCloserToHome(Strategy):
+    """
+    Strategy: When you roll 6 and there is figure that is close to home then move with it.
+        Else, place a new figure.
+    """
 
     def move_place_choice(self, game, player, roll):
         closest = closest_pos(player.pos)
@@ -70,37 +87,5 @@ class MoveCloserToHome(Strategy):
             player.place_figure(game)
 
     def move_choice(self, game, player, roll):
-
-        """
-        closest_list = []
-        figure_index = 0
-        for pos in player.pos:
-            if pos[0] < game.homes[game.turn]:  # if 0 <= pos[0] < game.homes[game.turn]
-
-                closest_list.append([pos, figure_index])
-            figure_index += 1
-        """
-
-        """
-        for pos in player.pos:
-            if abs(pos[0] - game.homes[game.turn]):
-                final_value = pos[0]
-                print("Found closest figure at " + abs(pos[0] - game.homes[game.turn]))
-        """
-
-        """
-        try:
-            closest = max(closest_list[0])
-        except:
-            closest = [None, random.choice(player.figures_on_board())]
-        """
-
-        """
-        for figure in player.figures_on_board():
-            if figure == closest_pos(player.pos)[0]:
-                game.move(player, figure, roll)
-                break
-        """
-
         figure = player.pos.index(closest_pos(player.pos))
         game.move(player, figure, roll)

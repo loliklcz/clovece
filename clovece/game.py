@@ -1,27 +1,40 @@
-# import random
-from art import dice
+"""
+Game file, see Game class
+"""
+
+from random import randint
+from time import time
 from colorama import init, Fore
 from player import Player
-from strategy import *
-from time import time
+from art import dice
+# from strategy import Strategy
+
 
 init(autoreset=True)
 
 
 class Game:
+    """
+    Game class, handles all players, board, turns, homes
+    """
+
+    # pylint: disable=too-many-instance-attributes
     def __init__(self, players, size, debug=False):
         self.players = players
         self.size = size
         self.debug = debug
         self.turn = 0
-        self.diceMax = 6
+        self.dice_max = 6
         self.homes = [0, size // 2]
         self.game_end = False
+
         self.player_won = None
+        self.total_turns = 0
 
         self.start_time = time()
 
         while self.game_end is not True:
+            self.total_turns += 1
             self.do_turn()
 
         if self.debug:
@@ -29,6 +42,9 @@ class Game:
             print("--- %s seconds ---" % (time() - self.start_time))
 
     def do_turn(self):
+        """
+        Called every turn, rolls a dice, checks dice roll
+        """
         current_player = self.players[self.turn]  # get player that is currently at turn
 
         if self.debug:
@@ -40,7 +56,7 @@ class Game:
 
         if self.debug:
             print(f"You rolled {roll}")
-        # self.draw_dice(roll)  # draw a dice image # TODO: maybe display it only when debug is true
+        # self.draw_dice(roll)  # draw a dice image
         #  (or delete it completely)
 
         self.check_roll(roll)  # do action based on roll number
@@ -52,9 +68,15 @@ class Game:
         return True
 
     def check_roll(self, roll: int):
+        """
+        Run function from strategy depending on dice roll
+            and count of figures at home, start or board
+        """
         player: Player = self.players[self.turn]
         # strategy = player.strategy(self, player, roll)
         strategy = player.strategy
+
+        # pylint:disable=pointless-string-statement
         """
         check = at least one figure at start
 
@@ -83,24 +105,10 @@ class Game:
             if self.debug:
                 print("Sorry, you must roll six to place a figure!")
 
-        """
-        if roll == 6 and player.has_figure() and player.get_figure_at_start() is not None:
-            print("You rolled 6!")
-            choice = random.randint(0, 1)
-            if choice == 0:
-                player.place_figure(self)
-            elif choice == 1:
-
-                self.move(player, choice, roll)
-            else:
-                self.move(player)
-
-        elif roll == 6 and player.get_figure_at_start() is not None:
-            # player.place_figure(self.homes[self.turn])
-            player.place_figure(self)
-        """
-
     def print_stats(self, player_object=None):
+        """
+        Prints information about player (used for debugging)
+        """
         if player_object is None:
             for player in self.players:
                 print(f"{player.name} ({player.color})")
@@ -133,7 +141,10 @@ class Game:
         print(" ".join(on_board) + "\n" + " ".join(at_start) + " | " + " ".join(at_home))
 
     def roll_dice(self) -> int:
-        roll = random.randint(1, self.diceMax)
+        """
+        Returns random number as dice roll
+        """
+        roll = randint(1, self.dice_max)
         return roll
 
     @staticmethod
@@ -146,7 +157,8 @@ class Game:
     @staticmethod
     def select_figure_dialog(player):
         """
-        TODO: remove this function later, it only displays available figures to user (not needed while using strategies)
+        TODO: remove this function later, it only displays available
+            figures to user (not needed while using strategies)
         """
         print("Select a figure you want to move!")
         # index = 0 remove later
@@ -154,6 +166,9 @@ class Game:
             print(figure)
 
     def move(self, player, figure: int, number: int):  # TODO: simplify this function
+        """
+        Move player's figure by x and handle destroying figures and wins
+        """
         player.pos[figure][0] += number
 
         # Game logic
@@ -185,5 +200,8 @@ class Game:
             return
 
     def win(self, player):
+        """
+        Set game_end to true and set the player who won
+        """
         self.game_end = True
         self.player_won = player.name
