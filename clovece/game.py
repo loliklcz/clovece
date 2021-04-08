@@ -165,7 +165,7 @@ class Game:
         for figure in player.figures_on_board():
             print(figure)
 
-    def move(self, player, figure: int, number: int):  # TODO: simplify this function
+    def move(self, player, figure: int, number: int):  # TOD\O: simplify this function ------- later
         """
         Move player's figure by x and handle destroying figures and wins
         """

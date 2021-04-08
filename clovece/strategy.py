@@ -29,12 +29,34 @@ def closest_pos(pos):
     return closest
 
 
+def closest_pos_to_enemy(pos, game, roll):
+    """
+    Return figure that would destroy enemy when moved
+    """
+
+    if game.turn == 0:
+        enemy_turn = 1
+    if game.turn == 1:
+        enemy_turn = 0
+    closest_list = []
+
+    # pylint:disable=invalid-name
+    for p in pos:
+        for enemy_p in game.players[enemy_turn].pos:
+            if p[1] is False and enemy_p[1] is False:
+                if (p[0] + roll) == enemy_p[0]:
+                    closest_list.append(p)
+                    # print(f"Closest to enemy: {p[0]} -- {enemy_p[0]}")
+
+    if len(closest_list) > 0:
+        return random.choice(closest_list)
+
+    return None
+
+
 class Strategy:
     """
-    def __init__(self, game, player, roll: int):
-        self.game = game
-        self.player = player
-        self.roll = roll
+    Main Strategy class structure
     """
 
     def move_place_choice(self, game, player, roll):
@@ -88,4 +110,39 @@ class MoveCloserToHome(Strategy):
 
     def move_choice(self, game, player, roll):
         figure = player.pos.index(closest_pos(player.pos))
+        game.move(player, figure, roll)
+
+
+class MoveCloserToEnemy(Strategy):
+    """
+    Strategy: When there is figure that you can destroy then destroy it,
+        else move closest figure to home.
+        Move with figure that will destroy enemy.
+    """
+
+    def move_place_choice(self, game, player, roll):
+        # code from MoveCloserToHome strategy
+        closest_enemy = closest_pos_to_enemy(player.pos, game, roll)
+        closest = closest_pos(player.pos)
+
+        if closest_enemy is not None:
+            figure = player.pos.index(closest_enemy)
+            game.move(player, figure, roll)
+        else:
+            if game.turn == 0 and closest[0] >= 7:
+                figure = player.pos.index(closest)
+                game.move(player, figure, roll)
+            elif game.turn == 1 and closest[0] >= 2:
+                figure = player.pos.index(closest)
+                game.move(player, figure, roll)
+            else:
+                player.place_figure(game)
+
+    def move_choice(self, game, player, roll):
+        closest = closest_pos_to_enemy(player.pos, game, roll)
+        if closest is not None:
+            figure = player.pos.index(closest)
+        else:
+            figure = player.pos.index(closest_pos(player.pos))
+
         game.move(player, figure, roll)

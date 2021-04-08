@@ -54,6 +54,7 @@ class Player:
             if figure[0] == -1:
                 return index
             index += 1
+        return None
 
     def place_figure(self, game):
         """

@@ -7,24 +7,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 from player import Player
 from game import Game
-from strategy import Random, MoveCloserToHome
-
+from strategy import MoveCloserToHome, MoveCloserToEnemy
+# from strategy import Random, MoveCloserToHome, MoveCloserToEnemy
 
 DEBUG = False
 GAMES = 1000
 
-# player1 = None
-# player2 = None
-# players = [player1, player2]
 
-# wins = []
 wins = [0, 0]
 total_turns = [[0], [0]]
 
 start_time = time()
 for i in range(0, GAMES):
-    player1 = Player("Test", MoveCloserToHome())
-    player2 = Player("Abc", Random())
+    player1 = Player("Test", MoveCloserToEnemy())
+    player2 = Player("Abc", MoveCloserToHome())
     players = [player1, player2]
 
     game = Game(players, 10, DEBUG)
@@ -59,7 +55,7 @@ rects1 = ax.bar(x - WIDTH / 2, player1_data, WIDTH, label=players[0].strategy.__
 rects2 = ax.bar(x + WIDTH / 2, player2_data, WIDTH, label=players[1].strategy.__class__.__name__)
 
 # Add some text for labels, title and custom x-axis tick labels, etc.
-ax.set_ylabel('Wins')
+# ax.set_ylabel('Wins')
 ax.set_title('Scores')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
