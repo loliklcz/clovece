@@ -73,7 +73,6 @@ class Game:
             and count of figures at home, start or board
         """
         player: Player = self.players[self.turn]
-        # strategy = player.strategy(self, player, roll)
         strategy = player.strategy
 
         # pylint:disable=pointless-string-statement
@@ -154,18 +153,7 @@ class Game:
         """
         print(dice[roll - 1])
 
-    @staticmethod
-    def select_figure_dialog(player):
-        """
-        TODO: remove this function later, it only displays available
-            figures to user (not needed while using strategies)
-        """
-        print("Select a figure you want to move!")
-        # index = 0 remove later
-        for figure in player.figures_on_board():
-            print(figure)
-
-    def move(self, player, figure: int, number: int):  # TOD\O: simplify this function ------- later
+    def move(self, player, figure: int, number: int):
         """
         Move player's figure by x and handle destroying figures and wins
         """

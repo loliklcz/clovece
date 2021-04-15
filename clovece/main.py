@@ -24,7 +24,6 @@ for i in range(0, GAMES):
     players = [player1, player2]
 
     game = Game(players, 10, DEBUG)
-    # wins.append(game.player_won)
     if game.player_won == player1.name:
         wins[0] += 1
         total_turns[0].append(game.total_turns)
@@ -42,8 +41,6 @@ print(f"Finished {GAMES} games in {time() - start_time} seconds")
 
 
 labels = ['Wins', 'Turns']
-# player1_data = [wins.count(player1.name)]
-# player2_data = [wins.count(player2.name)]
 player1_data = [wins[0], round(mean_turns[0])]
 player2_data = [wins[1], round(mean_turns[1])]
 
@@ -54,8 +51,6 @@ fig, ax = plt.subplots()
 rects1 = ax.bar(x - WIDTH / 2, player1_data, WIDTH, label=players[0].strategy.__class__.__name__)
 rects2 = ax.bar(x + WIDTH / 2, player2_data, WIDTH, label=players[1].strategy.__class__.__name__)
 
-# Add some text for labels, title and custom x-axis tick labels, etc.
-# ax.set_ylabel('Wins')
 ax.set_title('Scores')
 ax.set_xticks(x)
 ax.set_xticklabels(labels)
